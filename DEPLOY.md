@@ -72,11 +72,7 @@ In Termux:
 4. Security → Network Access → Add IP Address
       Choose "Allow Access From Anywhere" (0.0.0.0/0)
       (This lets Render connect)
-5. Clusters → Connect → Drivers → Node.js
-      Copy the connection string — looks like:
-      mongodb+srv://festwishuser:PASSWORD@cluster0.xxxxx.mongodb.net/
-6. Add "festwish" at the end:
-      mongodb+srv://festwishuser:PASSWORD@cluster0.xxxxx.mongodb.net/festwish
+
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## STEP 4 — CLOUDINARY (free)
@@ -88,7 +84,6 @@ In Termux:
       Cloud name
       API Key
       API Secret
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## STEP 5 — DEPLOY ON RENDER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
