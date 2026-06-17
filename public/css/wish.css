@@ -1,0 +1,417 @@
+/* ═══════════════════════════════════════════════════════
+   FestWish — Wish View Page Stylesheet
+   Full-screen cinematic experience
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  --font-display: 'Cinzel Decorative', serif;
+  --font-body: 'Quicksand', sans-serif;
+  --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100%; }
+
+body {
+  background: #050510;
+  color: #fff;
+  font-family: var(--font-body);
+}
+
+/* ─── Curtain Stage ───────────────────────────────────── */
+#curtain-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.curtain {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 51%;
+  background: linear-gradient(180deg, #1a0533 0%, #0d0122 40%, #120e00 100%);
+  transition: transform 1.8s cubic-bezier(0.87, 0, 0.13, 1);
+  overflow: hidden;
+}
+
+.curtain::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, rgba(255,214,0,0.15), rgba(255,214,0,0.05));
+  box-shadow: inset -5px 0 15px rgba(255,214,0,0.1);
+}
+
+.curtain-left { left: 0; transform-origin: left; }
+.curtain-left::after { right: 0; }
+.curtain-right { right: 0; transform-origin: right; }
+.curtain-right::after { left: 0; background: linear-gradient(270deg, rgba(255,214,0,0.15), rgba(255,214,0,0.05)); }
+
+/* Curtain folds (decorative vertical lines) */
+.curtain-folds {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 18px,
+    rgba(0,0,0,0.15) 18px,
+    rgba(0,0,0,0.15) 20px
+  );
+}
+
+.curtain-open .curtain-left { transform: translateX(-100%); }
+.curtain-open .curtain-right { transform: translateX(100%); }
+
+/* ─── Wish Canvas (full screen) ───────────────────────── */
+#wish-app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Dynamic festival background */
+.wish-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: #050510;
+}
+.wish-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.wish-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+}
+
+/* ─── Particles Canvas ────────────────────────────────── */
+#particles-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ─── Main Wish Card ──────────────────────────────────── */
+.wish-card {
+  position: relative;
+  z-index: 10;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 6rem; /* space for CTA */
+}
+
+.wish-card.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* ─── Photo Frame ─────────────────────────────────────── */
+.photo-frame {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.photo-frame.animate-in {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.photo-img {
+  width: min(280px, 70vw);
+  height: min(280px, 70vw);
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+/* Glow rings */
+.photo-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #FFD600, #FF4081, #7B2FF7, #00BFA5, #FFD600
+  );
+  animation: rotateBorder 4s linear infinite;
+  z-index: 0;
+}
+
+.photo-glow-inner {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #050510;
+  z-index: 0;
+}
+
+.photo-frame > * { position: relative; }
+
+@keyframes rotateBorder { to { transform: rotate(360deg); } }
+
+/* Sparkles around photo */
+.photo-sparkle {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #FFD600;
+  box-shadow: 0 0 8px #FFD600;
+  animation: sparkleOrbit linear infinite;
+}
+
+@keyframes sparkleOrbit {
+  0% { transform: rotate(var(--start-deg)) translateX(var(--orbit-r)) scale(0); opacity: 0; }
+  10% { opacity: 1; transform: rotate(calc(var(--start-deg) + 36deg)) translateX(var(--orbit-r)) scale(1); }
+  90% { opacity: 1; transform: rotate(calc(var(--start-deg) + 324deg)) translateX(var(--orbit-r)) scale(1); }
+  100% { opacity: 0; transform: rotate(calc(var(--start-deg) + 360deg)) translateX(var(--orbit-r)) scale(0); }
+}
+
+/* ─── Festival Badge ──────────────────────────────────── */
+.festival-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  backdrop-filter: blur(10px);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  animation: none;
+}
+.festival-badge.animate-in {
+  animation: badgeFadeIn 0.6s 0.3s both;
+}
+@keyframes badgeFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Wish Text ───────────────────────────────────────── */
+.wish-message {
+  font-size: clamp(1.05rem, 4vw, 1.3rem);
+  line-height: 1.7;
+  color: rgba(255,255,255,0.92);
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+  opacity: 0;
+}
+.wish-message.animate-in {
+  animation: textReveal 0.8s 0.4s both;
+}
+
+@keyframes textReveal {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wish-sender {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.25rem;
+  opacity: 0;
+}
+.wish-sender.animate-in {
+  animation: textReveal 0.6s 0.6s both;
+}
+
+.sender-name {
+  background: linear-gradient(135deg, #FFD600, #FF9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* ─── Floating Lights ─────────────────────────────────── */
+.floating-light {
+  position: fixed;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 4;
+  animation: floatLight linear infinite;
+}
+
+@keyframes floatLight {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% { opacity: 1; transform: translateY(90vh) scale(1); }
+  90% { opacity: 0.8; }
+  100% {
+    transform: translateY(-10vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ─── CTA Bar (fixed bottom) ──────────────────────────── */
+.cta-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 50;
+  padding: 1rem 1.5rem 1.5rem;
+  background: linear-gradient(to top, rgba(5,5,16,0.98) 0%, rgba(5,5,16,0.8) 70%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.cta-bar.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cta-main-btn {
+  width: 100%;
+  max-width: 400px;
+  display: block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #7B2FF7 0%, #FF4081 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(123,47,247,0.6);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 8px 32px rgba(123,47,247,0.6); }
+  50% { box-shadow: 0 8px 50px rgba(123,47,247,0.9), 0 0 80px rgba(255,64,129,0.3); }
+}
+
+.cta-main-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  animation: btnShine 2.5s infinite;
+}
+@keyframes btnShine {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(200%); }
+}
+
+.cta-share-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.cta-share-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  font-family: var(--font-body);
+  transition: 0.3s;
+}
+
+.cta-share-btn.wa { background: #25D366; color: white; }
+.cta-share-btn.wa:hover { background: #20b858; }
+.cta-share-btn.copy { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+.cta-share-btn.copy:hover { background: rgba(255,255,255,0.18); }
+
+/* ─── Music Touch Unlock ──────────────────────────────── */
+.music-unlock-toast {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 30px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.8);
+  z-index: 200;
+  white-space: nowrap;
+  animation: toastIn 0.4s ease;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ─── Error Screen ────────────────────────────────────── */
+.error-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  text-align: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+.error-screen h2 { font-size: 1.5rem; opacity: 0.8; }
+.error-screen p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+.error-screen a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #7B2FF7, #FF4081);
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; }
+                                                                                                }
+  
