@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FestWish — Create Magical Festival Greetings</title>
+  <meta name="description" content="Create stunning personalised festival wishes with your photo and music. Share on WhatsApp and spread joy!">
+  <meta property="og:title" content="FestWish — Create Magical Festival Greetings">
+  <meta property="og:description" content="Create cinematic festival wishes. Share the magic!">
+  <meta property="og:image" content="/og-cover.jpg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#7B2FF7">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-bg-anim">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="logo-wrap">
+      <span class="logo-icon">✨</span>
+      <h1 class="logo-text">FestWish</h1>
+    </div>
+    <p class="hero-tagline">Send magical festival wishes they'll never forget</p>
+    <p class="hero-sub">Cinematic animations · Your photo · Background music · Viral sharing</p>
+    <a href="#create" class="cta-hero-btn">
+      <span>Create Your Wish</span>
+      <span class="btn-glow"></span>
+    </a>
+    <div class="festival-chips">
+      <span>🪔 Diwali</span><span>🎨 Holi</span><span>🎄 Christmas</span>
+      <span>🎆 New Year</span><span>🎂 Birthday</span><span>🪁 Sankranti</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CREATE SECTION ═══ -->
+<section id="create" class="create-section">
+  <div class="section-header">
+    <h2 class="section-title">Create Your Festival Wish</h2>
+    <p class="section-sub">Fill in the details and share your magical greeting</p>
+  </div>
+
+  <div class="form-container">
+
+    <!-- STEP 1: Festival -->
+    <div class="form-step">
+      <div class="step-label"><span class="step-num">1</span> Choose Festival</div>
+      <div class="festival-grid">
+        <label class="festival-card" data-festival="diwali">
+          <input type="radio" name="festival" value="diwali" hidden>
+          <div class="fest-emoji">🪔</div><div class="fest-name">Diwali</div>
+        </label>
+        <label class="festival-card" data-festival="holi">
+          <input type="radio" name="festival" value="holi" hidden>
+          <div class="fest-emoji">🎨</div><div class="fest-name">Holi</div>
+        </label>
+        <label class="festival-card" data-festival="christmas">
+          <input type="radio" name="festival" value="christmas" hidden>
+          <div class="fest-emoji">🎄</div><div class="fest-name">Christmas</div>
+        </label>
+        <label class="festival-card" data-festival="newyear">
+          <input type="radio" name="festival" value="newyear" hidden>
+          <div class="fest-emoji">🎆</div><div class="fest-name">New Year</div>
+        </label>
+        <label class="festival-card" data-festival="birthday">
+          <input type="radio" name="festival" value="birthday" hidden>
+          <div class="fest-emoji">🎂</div><div class="fest-name">Birthday</div>
+        </label>
+        <label class="festival-card" data-festival="sankranti">
+          <input type="radio" name="festival" value="sankranti" hidden>
+          <div class="fest-emoji">🪁</div><div class="fest-name">Sankranti</div>
+        </label>
+        <label class="festival-card" data-festival="navratri">
+          <input type="radio" name="festival" value="navratri" hidden>
+          <div class="fest-emoji">🪷</div><div class="fest-name">Navratri</div>
+        </label>
+        <label class="festival-card" data-festival="eid">
+          <input type="radio" name="festival" value="eid" hidden>
+          <div class="fest-emoji">🌙</div><div class="fest-name">Eid</div>
+        </label>
+      </div>
+    </div>
+
+    <!-- STEP 2: Photo upload -->
+    <div class="form-step">
+      <div class="step-label"><span class="step-num">2</span> Upload Your Photo</div>
+
+      <!-- Hidden file input — triggered programmatically -->
+      <input type="file" id="image-input" accept="image/*" style="display:none">
+
+      <div class="upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="Upload photo">
+        <div class="upload-placeholder" id="upload-placeholder">
+          <div class="upload-icon">📸</div>
+          <p class="upload-title">Tap to upload your photo</p>
+          <p class="upload-hint">JPG · PNG · WebP · Max 10 MB</p>
+        </div>
+        <img id="image-preview" class="image-preview hidden" alt="Preview">
+        <button type="button" id="change-photo-btn" class="change-photo-btn hidden">Change Photo</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Details -->
+    <div class="form-step">
+      <div class="step-label"><span class="step-num">3</span> Your Details</div>
+      <div class="input-group">
+        <label for="sender-name">Your Name</label>
+        <input type="text" id="sender-name" placeholder="Enter your name" maxlength="60" autocomplete="name">
+        <span class="char-count" id="name-count">0/60</span>
+      </div>
+      <div class="input-group">
+        <label for="wish-message">Your Wish Message</label>
+        <textarea id="wish-message" placeholder="Write your heartfelt festival message..." maxlength="500" rows="4"></textarea>
+        <span class="char-count" id="msg-count">0/500</span>
+      </div>
+    </div>
+
+    <!-- STEP 4: Music -->
+    <div class="form-step">
+      <div class="step-label"><span class="step-num">4</span> Choose Background Music</div>
+      <p class="step-hint">Pick a song that plays when they open your wish</p>
+
+      <div class="songs-carousel" id="songs-carousel">
+        <div class="songs-loading">Loading music...</div>
+      </div>
+
+      <div class="custom-audio-section">
+        <div class="divider-line"><span>or upload your own</span></div>
+        <!-- Label wraps hidden input — clicking the label opens file picker -->
+        <label class="custom-audio-label" for="audio-input">
+          <div class="custom-audio-icon">🎵</div>
+          <div>
+            <p class="custom-audio-title">Upload Your Own Song</p>
+            <p class="custom-audio-hint">MP3 only · Max 30 sec · Max 5 MB</p>
+          </div>
+          <input type="file" id="audio-input" accept=".mp3,audio/mpeg,audio/mp3" style="display:none">
+          <span class="custom-audio-btn">Browse</span>
+        </label>
+        <div id="audio-status" class="audio-upload-status hidden"></div>
+      </div>
+    </div>
+
+    <!-- GENERATE BUTTON -->
+    <button type="button" id="generate-btn" class="generate-btn" disabled>
+      <span id="btn-text">✨ Generate Wish Link</span>
+      <div id="btn-loader" class="btn-loader hidden">
+        <div class="spinner"></div>
+        <span>Creating magic...</span>
+      </div>
+      <span class="btn-glow"></span>
+    </button>
+
+  </div><!-- /form-container -->
+</section>
+
+<!-- ═══ SUCCESS MODAL ═══ -->
+<div id="success-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="success-icon">🎉</div>
+    <h3 class="modal-title">Your Wish is Ready!</h3>
+    <p class="modal-sub">Share this link with your loved one</p>
+
+    <div class="share-url-box">
+      <span id="share-url-text" class="share-url-text"></span>
+      <button id="copy-btn" class="icon-btn" title="Copy link">📋</button>
+    </div>
+
+    <div class="modal-actions">
+      <a id="whatsapp-btn" href="#" target="_blank" rel="noopener" class="modal-btn whatsapp-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        Share on WhatsApp
+      </a>
+      <button id="preview-btn" class="modal-btn preview-btn">👁️ Preview Wish</button>
+    </div>
+
+    <div class="qr-section">
+      <button id="show-qr-btn" class="text-btn">Show QR Code</button>
+      <img id="qr-img" class="qr-img hidden" alt="QR Code">
+    </div>
+
+    <button id="create-another-btn" class="text-btn create-another">+ Create Another Wish</button>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="footer-brand"><span>✨</span><span>FestWish</span></div>
+  <p class="footer-copy">Spread joy, one wish at a time 🎊</p>
+  <div class="footer-links">
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="/js/particles.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>
